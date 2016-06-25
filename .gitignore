@@ -1,0 +1,21 @@
+*.py[cod]
+__pycache__
+
+# Packages
+*.egg
+*.egg-info
+dist/*
+build/*
+
+# Sphinx
+doc/_build/*
+doc/libfinder/*
+
+# Tox
+.tox/*
+.cache/*
+.coverage
+
+# Misc
+*~
+
