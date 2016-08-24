@@ -103,7 +103,11 @@ def _ldconfig_search(library):
 
         libm.so.6 (libc6,x86-64, OS ABI: Linux 2.6.24) => /lib/x86_64-linux-gnu/libm.so.6
     """  # noqa
-    ldconfig = _execute('ldconfig -p')
+    executable = find_executable('ldconfig')
+    if executable is None:
+        return None
+
+    ldconfig = _execute('{} -p'.format(executable))
     if ldconfig is None:
         return None
 
@@ -218,18 +222,12 @@ def soname(library_path):
     """
     assert isfile(library_path), 'No such file {}'.format(library_path)
     dump = _execute('objdump -x -j .dynamic {}'.format(library_path))
+    if dump is None:
+        return None
     match = search(r'\sSONAME\s+([^\s]+)', dump)
     if not match:
         return None
     return match.group(1)
 
 
-__all__ = []
-__api__ = [
-    '_abi_type',
-    '_execute',
-    '_final_path',
-    '_ldconfig_search',
-    '_gcc_search',
-    '_local_search'
-]
+__all__ = ['find_library', 'soname']
